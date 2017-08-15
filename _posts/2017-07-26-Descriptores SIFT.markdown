@@ -1,3 +1,9 @@
+---
+layout: post
+title:  "Descriptores SIFT"
+date:   2017-07-26 18:16:10 -0400
+categories: jekyll update
+---
 # Descriptor SIFT
 Los descriptores SIFT permiten obtener de una imagen muchas caracteristicas que describen sus objetos. Son utiles para buscar objetos en imagenes.
 

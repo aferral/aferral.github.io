@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 ## Proyecto de aprendizaje de refuerzo
 

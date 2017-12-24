@@ -37,11 +37,3 @@ El proyecto hasta este punto esta en
 * Creo que es necesario observar un estimado de perdida mas certero. Por lo tanto tomare varios batch para calcular el estimado de loss. Esto entregara algo menos ruidoso. Notar que esto sera solo para temas de graficar el entrenamiento seguira siendo de un solo batch.
 
 * ¿Puede la escala del error afectar el desempeño? De momento las recompensas son 10 para combo, -1 cualquier otra cosa y un gamma de 0.1. ¡ Como estos valores influyen en el entrenamiento respecto a su magnitud ?
-
-
-
-
-
-
-
-

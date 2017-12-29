@@ -33,6 +33,10 @@ Realizando estos cambios obtuve dos modelos con learning_rate decreciente en for
 
 No existio mayor cambio en los resultados tanto en score como en loss. Por lo tanto hay que seguir investigando.
 
+Commit hasta este punto
+https://bitbucket.org/aferral/bilge-sup/commits/ed541c8245e7623fdbb29d08a02b9f88ee7af849
+
+
 
 
 El otro asunto es que el modelo tiene datos muy variables s

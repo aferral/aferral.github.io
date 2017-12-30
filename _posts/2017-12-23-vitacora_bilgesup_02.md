@@ -36,11 +36,10 @@ No existio mayor cambio en los resultados tanto en score como en loss. Por lo ta
 Commit hasta este punto
 https://bitbucket.org/aferral/bilge-sup/commits/ed541c8245e7623fdbb29d08a02b9f88ee7af849
 
+Voy a comenzar a guardar los gradientes para observar que ocurre.
 
 
 
-El otro asunto es que el modelo tiene datos muy variables s
-
-
+La imagen muestra que no hay nada muy extraño decrecen despues de cierto tiempo dando a entender que el modelo aprende normalmente. El modelo muestra que la mayor variacion esta en los bias de las ultimas capas.
 
 

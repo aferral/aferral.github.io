@@ -38,8 +38,14 @@ https://bitbucket.org/aferral/bilge-sup/commits/ed541c8245e7623fdbb29d08a02b9f88
 
 Voy a comenzar a guardar los gradientes para observar que ocurre.
 
-
+![Gradientes modelo resultante]({{site.baseurl}}/_posts/gradientes.png)
 
 La imagen muestra que no hay nada muy extraño decrecen despues de cierto tiempo dando a entender que el modelo aprende normalmente. El modelo muestra que la mayor variacion esta en los bias de las ultimas capas.
+
+Algo que me acabo de dar cuenta es que tengo un relu en la capa final lo que obliga a tener valores positivos cuando hay muchos valores -1. Cambiando esto no ocurrieron grandes cambios. Repasando todo lo anterior me da la impresion que el modelo no es lo suficiente poderoso. Otra idea a explorar es cambiar las reward de -1, +10 con salida lineal a otra cosa.
+
+https://bitbucket.org/aferral/bilge-sup/commits/3247ca82b20d1594df9478a48a2c56f52c78e795
+
+
 
 

@@ -18,6 +18,7 @@ Intente con una arquitectura de mas capas y al parecer tampoco funciona lo que i
 Hipotesis a testear ahora:
 
 Mejorara con redes gemelas?
+Como afecta esto la estabilidad
 
 
 

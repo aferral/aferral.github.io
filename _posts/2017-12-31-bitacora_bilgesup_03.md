@@ -32,6 +32,18 @@ HABLAR DE DINAMISMO DEL SITEMA
 
 AVERIGUAR DEFINICION DEL PROBLEMA FRENTE A
 
+## Recordar bajar random prob
+
+Otro detalle importante que me acabo de dar cuenta es que la probabilidad de exploracion debe bajarse paulatinamiente o de lo contrario daña el modelo. En mi caso estaba constante en el 0.3 (Si el numero random cae bajo 0.3 realiza accion aleatoria) lo cual produciria cierta aleatoriedad en el proceso que realmente no existe en caso de explotacion.
+
+Tablas de score hasta ahora (Todos con 1000 estados con sampleo aleatorio cada 5 acciones)
+
+Modelo V8 con random_prob=0.3 score 410
+Modelo V8 con random_prob=0 score 930.1
+Modelo perfecto hasta dos pasos score 1404.7
+Modelo completamente aleatorio 114.75
+
+Es importante recalcar que el sistema sufre una importante falla. Sin esta probabilidad aleatoria tiende a quedarse atrapado en acciones redundantes. Es decir termina realizando siempre la misma accion al ser el board y su reaccion muy similares para la red. Esto no es detectado por el score del modelo aleatorio ya que esa aleatoriedad evita bucles y a su vez el algoritmo de evaluacion se resetea cada 5 acciones. Para 
 
 ## Habilidad del modelo para buscar movimientos a mas de 1 paso
 Me gustaria ahora comparar este modeo con el modelo de revisar exaustivamente a un paso. Quiero evaluar si efectivamente mi modelo esta planeando al largo plazo. Lo 

@@ -10,8 +10,19 @@ Para evaluar el desempeño del modelo genere una nueva visualizacion que muestre
 
 (Fotos de evaluaciones)
 
+{% include carousel.html name=”Example” data="[
+  {
+    "title": "An image",
+    "caption": "A caption",
+    "url": "an url"
+  },
+  {
+    "title": "An image",
+    "url": "another url"
+  },
+]" %}
 
-Esto lleva a dos caminos uno mejorar el algoritmo de entrenamiento o cambiar la estructura completa de la red. Primero intentare cambiar algo el entrenamiento de la red con un red gemela que se encargue de producir el target y la red de estimacion que actualizo. Esto es la implementacion que se utilizo en el paper de deepmind DQN.
+Esto lleva a dos caminos uno mejorar el algoritmo de entrenamiento o cambiar la estructura completa de la red. Me parece mas sensato primero intentar el algoritmo propuesto en el paper de DeepMind del 2003 donde usan dos redes en vez de una. Una red se guarda cada ciertos pasos y esta es la red utilizada para generar los target. La idea de esto es lograr un estimado del target menos ruidoso.
 
 ## Un gran error
 

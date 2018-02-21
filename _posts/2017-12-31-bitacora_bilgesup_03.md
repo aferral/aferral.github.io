@@ -68,6 +68,7 @@ https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf
 * Mucho cuidado con las reward
 https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b
 
+* Una nueva propuesta de replay memory https://arxiv.org/pdf/1710.06574.pdf
 
 Ideas a revisar
 

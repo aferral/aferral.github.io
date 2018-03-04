@@ -27,6 +27,12 @@ Subsampling ?????
 Diferencia entre convolucion y correlacion ??
 
 
+We area going deeeper 
+Mucho sobre como calcular casos donde el kernel no es impar
+--- https://www.tensorflow.org/api_guides/python/nn#Notes_on_SAME_Convolution_Padding
+
+
+
 -- Propiedades
 
 input shape
@@ -47,4 +53,3 @@ Referencias
 [1] https://arxiv.org/pdf/1603.07285.pdf
 http://deeplearning.net/software/theano/tutorial/conv_arithmetic.html
 https://medium.com/mlreview/a-guide-to-receptive-field-arithmetic-for-convolutional-neural-networks-e0f514068807
-

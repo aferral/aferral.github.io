@@ -44,6 +44,10 @@ Preguntas
 -- Cuando se reciclan canales??
 -- 
 
+Finalmente lo explican bien
+aca
+https://www.youtube.com/watch?v=Xk7myx9_OmU&t=392s
+
 
 -- Con varias dimensiones
 -- Ejempo con parametros

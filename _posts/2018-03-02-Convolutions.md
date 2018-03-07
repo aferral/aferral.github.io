@@ -3,46 +3,62 @@ published: false
 ---
 ## A New Post
 
+
+Explicar que me parece siempre bueno ver algo desde varias perspectivas y como estas son equivalentes.
+
+# Convolucion
+
+Motivacion MLP antigua y porque no es tan eficiente. Relacion espacial, compartir parametros.
+
+(convolucion o correlacion) **
+
+## Parametros de convolucion
+
+
+definiciion de cada uno stride,padding,input,kernel size *
+
+*** A1 animacion con convolucion configurable
+
+(ecuacion de la convolucion general) **
+
+# Convolucion como matrix
+
+Hablar de equivalencia de convolucion a multiplicacion de matriz toepliz  ***
+
+*** A2 animacion de matriz generica con equivalencia a convolucion 
+
+# Conectividad de filtros
+
+Si se habla que celda de entrada es influenciada por cada posicion de filtro tendremos este driagra. De ahora no parece mucha utilidad pero la tendra. ***
+
+*** A3 diagrama conectividad filtros
+
+# Formulas de salida
+
+# Transposed convolucion
+
+Diversos nombres que tiene y porque no deberia llamarse deconvolucion.
+
+MOtivacion lograr mismo size de convolucion con mismo filtro. Usos en diversas aplicaciones
+
+# Forma de derivarla por conectividad
+
+# Forma de derivarla por matrix
+
+# Visualizacion por superposicion (lo mismo que conectividad)
+
+# Formulas de salida y calculo de conv a deconv.
+
 Enter text in [Markdown](http://daringfireball.net/projects/markdown/). Use the toolbar above, or click the **?** button for formatting help.
 
 
-Idea principal tomar informacion de la estructura de los datos
+Dudas interesantes (extras)
 
-
-1. Operacion convolucion como usarla
-
-Un kernel se puede definir 
-(n, m, k1, . . . , kN ),
-
-El tamano de salida esta dado en cada dimension por
-stride size, input size, zero padding
-
-Stride tiene relacion con subsampling
-
-Subsampling ?????
-
-** Zero padding stride 1
-
-
-Diferencia entre convolucion y correlacion ??
-
-
-We area going deeeper 
+** Calculo detallado de formulas
 Mucho sobre como calcular casos donde el kernel no es impar
 --- https://www.tensorflow.org/api_guides/python/nn#Notes_on_SAME_Convolution_Padding
 
-
-
--- Propiedades
-
-input shape
-kernel shape
-zero padding
-striding
-
-Preguntas
--- Cuando se reciclan canales??
--- 
+** Ejemplos varias dimensiones
 
 Finalmente lo explican bien
 aca

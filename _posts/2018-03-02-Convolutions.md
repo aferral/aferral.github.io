@@ -1,14 +1,17 @@
 ---
 published: false
 ---
-## A New Post
 
+La idea de este post es tratar de hablar detalladamente de los parametros de la convolucion discreta. Me centrare en una parte muy especifica que trata de explicar intuitivamente como funcionan los parametros respecto a la operacion y la relacion entre convolucion/conv. transpuesta.
 
-Explicar que me parece siempre bueno ver algo desde varias perspectivas y como estas son equivalentes.
+Siempre me ha gustado tratar de ver un tema desde varias perpectivas y ver como estas son equivalentes. Con esta idea en mente tratare de mostrar las convoluciones como filtros como matrices y sus conectividades.
 
 # Convolucion
 
-Motivacion MLP antigua y porque no es tan eficiente. Relacion espacial, compartir parametros.
+La motivacion para que las redes comenzaran a usar convoluciones parte de la necesidad de encontrar una forma de aprovechar la estructura de los datos. Usualmente en imagenes los pixeles cercanos tienen bastante importancia al por ejemplo buscar un ojo una cara o cualquier tipo de patron visual. Si intentaramos usar una red MLP tiene que aprender a encontrar estas relaciones como un trabajo extra. Una convolucion es en cierta forma una MLP con un prior infinitamente fuerte con sus conexiones vecinas.
+
+La convolucion tambien involucra muchos menos parametros a reutilizar sus pesos por tods los filtros. De hechos las tipicas redes de clasificacion teine su mayor cantidad de parametros al concadenar los filtros y usar una MLP.
+
 
 (convolucion o correlacion) **
 

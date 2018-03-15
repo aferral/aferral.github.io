@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+	<title>Test1</title>
+</head>
+
+
+<style type="text/css">
+	
+.inputCell { 
+    fill: #fff;
+}
+
+.padCell {
+    fill: #91907e;
+}
+
+.kernelCell{
+	fill: #4286f4;
+}
+
+.kernelCellZoom{
+	fill: #4286f4;
+}
+
+.kernelOut{
+	fill: #2bc638;
+}
+
+.activeOut{
+	fill: rgba(124,240,10,0.5);
+}
+
+
+
+
+</style>
+
+<!-- D3 -->
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+
+<!-- Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css" integrity="sha384-TEMocfGvRuD1rIAacqrknm5BQZ7W7uWitoih+jMNFXQIbNl16bO8OZmylH/Vi/Ei" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js" integrity="sha384-jmxIlussZWB7qCuB+PgKG1uLjjxbVVIayPJwi6cG6Zb4YKq0JIw+OMnkkEC7kYCq" crossorigin="anonymous"></script>
+
+<body>
+
+<!-- TODO colocar zoom en otro lado?
+
+
+TODO salida
+
+
+
+<!-- TODO checkbox para padding doble -->
+<!-- TODO numeros en sliders -->
+<!-- TODO calculador de tamano de input output
+TODO flechas conexiones
+TODO mostrar todos los numeros de posiciones filtros -->
+<!-- TODO centrar letras del zoom ? -->
+<!-- TODO margen en canvas -->
+<!-- TODO boton de half,full pading -->
+
+
+
+
+
+
+
+<div class='row'>
+	<div class='col-sm-6'>
+			
+		<div class='col-sm-12 slider'>
+		<label>Input V</label>
+		<input type="range" min=1 max=5 step=1 id="InputV">
+		</div>
+
+		<div class='col-sm-12 slider'>
+		<label>Input H</label>
+		<input type="range" min=1 max=5 step=1 id="InputH">
+		</div>
+
+		<div class='col-sm-12 slider'>
+		<label>Padding H</label>
+		<input type="range" min=0 value=1 max=5 step=1 id="PaddingH">
+		</div>
+
+		<div class='col-sm-12 slider'>
+		<label>Padding V</label>
+		<input type="range" min=0 value=1 max=5 step=1 id="PaddingV">
+		</div>
+
+
+
+		<div class='col-sm-12 slider'>
+		<label>Kernel H</label>
+		<input type="range" min=1 value=2 max=5 step=1 id="KernelH">
+		</div>
+		
+		<div class='col-sm-12 slider'>
+		<label>Kernel V</label>
+		<input type="range" min=1 value=2 max=5 step=1 id="KernelV">
+		</div>
+
+		<div class='col-sm-12 slider'>
+		<label>Stride H</label>
+		<input type="range" value=1 min=1 max=5 step=1 id="strideH">
+		</div>
+
+		<div class='col-sm-12 slider'>
+		<label>Stride V</label>
+		<input type="range" value=1 min=1 max=5 step=1 id="strideV">
+		</div>
+
+		<div class='col-sm-12' id='sliderX'>
+		<label>Animation step</label>
+		<input type="range" value=1 min=0 max=5 step=1 id="step">
+		<button id='restart'>Play</button>
+		</div>
+
+	</div>
+
+	<div class='col-sm-6' id="grid">
+
+		
+	</div>
+
+
+</div>
+
+
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+// --------------- Initial variables
+var dataInputPad = [];
+var dataKernel = [];
+
+var canvasW = 1200
+var canvasH = 1200
+
+var marginH = 10
+var marginW = 10
+
+var x0Zoom = 500
+var y0Zoom = 50
+
+var zoomTotalWidth = 300
+var zoomTotalHeight = 300
+
+timer=false
+stoped = false
+
+
+// ----------------Define initial elements 
+d3.select('#grid').style('position','relative')
+
+var grid = d3.select("#grid")
+	.append("svg")
+	.attr("width",(canvasW).toString()+"px")
+	.attr("height",(canvasH).toString()+"px");
+
+
+
+
+grid.append('g').attr('id','kernelZoom')
+
+grid.append('g').attr('id','kernelResult')
+
+
+// Event handlers
+d3.selectAll(".slider").on("input", function() {
+generateAll()
+});
+
+d3.selectAll("#step").on("input", function() {
+stepSet()
+});
+
+d3.selectAll("#restart").on("click", function() {
+restartAnimation()
+});
+
+
+generateAll()
+
+
+
+// --------------- --------------- Functions 
+
+
+function getSliders(){
+
+	sth=document.getElementById('strideH').value
+	stv=document.getElementById('strideV').value
+
+	ph=document.getElementById('PaddingH').value
+	pv=document.getElementById('PaddingV').value
+
+	inh=document.getElementById('InputV').value
+	inv=document.getElementById('InputH').value
+
+	kh=document.getElementById('KernelH').value
+	kv=document.getElementById('KernelV').value
+	return {strideH : sth, strideV : stv, paddingH : ph, paddingV : pv,
+	 inputH : inh, inputV : inv, kernelH : kh, kernelV : kv }
+}
+
+function restartAnimation(){
+	if (timer) {clearInterval(timer);}
+	timer = setInterval(step, 300);
+	stoped = false
+}
+
+function stepSet(){
+	stoped = true
+	stepValue=document.getElementById('step').value
+	clearInterval(timer);
+	// console.log(stepValue)
+	currentValue = Number(stepValue) 
+	step()
+
+
+}
+
+function isPadCell(row,col,maxRow,maxCol,state){
+	const pv = state.paddingV;
+	const ph = state.paddingH;
+
+	// console.log('row: '+row+" col: "+col+" maxRow: "+maxRow+" maxCol: "+maxCol)
+	// console.log("row <= (pv-1): "+row <= (pv-1))
+	// console.log("(row >= (maxRow-pv)): "+(row >= (maxRow-pv)))
+	// console.log("( col <= (ph-1) ): "+( col <= (ph-1) ))
+	// console.log("(col >= (maxCol-ph)) :"+(col >= (maxCol-ph)))
+
+	return ( row <= (pv-1) ) || (row >= (maxRow-pv)) || ( col <= (ph-1) ) || (col >= (maxCol-ph))
+
+}
+
+function getStringIndex(lrow,lcol,kernelPosRow,kernelPosCol,state){
+	const sth = state.strideH;
+	const stv = state.strideV;
+
+	t=calculateInputExt(state)
+	const maxRow = t.h;
+	const maxCol = t.w;
+
+	const gRow = lrow + kernelPosRow * sth;
+	const gCol = lcol + kernelPosCol * stv;
+
+	console.log("lrow: "+lrow+" lcol: "+lcol+" kRow: "+
+		kernelPosRow+" kCol: "+kernelPosCol+" std "+sth+" stv "+stv)
+	console.log("gRow "+gRow+" gCol "+gCol)
+	console.log(" ")
+
+	isPad = isPadCell(gRow,gCol,maxRow,maxCol,state)
+
+	if (isPad) {
+		return "PAD"
+	}
+	else{
+		return "w_{"+lrow+","+lcol+"}"+" \\cdot "+"M_"+"{"+gRow+','+gCol+"}"
+	}
+
+	
+
+}
+
+function step() {
+
+	maxStep = (limitsKernel.w * limitsKernel.h)
+
+	ref = d3.selectAll('.kernelCell').data(dataKernel)
+
+
+	i = Math.floor(currentValue/limitsKernel.w) 
+	j = currentValue % limitsKernel.w
+
+	const stepW = function(d) {return d.width*j*Number(state.strideH) }
+	const setpH = function(d) {return d.height*i*Number(state.strideV)}
+
+	// Move kernelCells to current position given currentValue
+
+	ref.attr('x',function(d) {return d.x + stepW(d)})
+	ref.attr('y',function(d) {return d.y + setpH(d)})
+
+
+
+	// Calculate text for kernel position
+	posX0 = dataKernel[0].width * Number(state.kernelH) / 2
+	posY0 = dataKernel[0].height * Number(state.kernelV) / 2
+
+	// Clean old text
+	grid.select('#kernelGroup').selectAll("text").remove()
+
+	// Draw new text
+	var textLabels = grid.select('#kernelGroup').append('text')
+	                 .attr("x", posX0 + dataKernel[0].width*j*Number(state.strideH) - 6)
+	                 .attr("y", posY0 + dataKernel[0].height*i*Number(state.strideV) + 8 )
+	                 .text( currentValue)
+	                 .attr("font-family", "sans-serif")
+	                 .attr("font-size", "25px")
+	                 .attr("fill", "red");
+
+
+	// Draw formulas
+	stoped=true
+	if (stoped){
+
+		d3.selectAll('.zoomEq').remove()
+
+		
+
+		const data = generateZoomCords(state,zoomTotalHeight,zoomTotalWidth,x0Zoom,y0Zoom)
+
+
+
+		var newEq = d3.select('#grid').selectAll('zoomEq').data(data).enter().append("div")
+		.attr("x", function(d) {return (d.x + d.width*0.0) })
+		.attr("y", function(d) {return (d.y + d.height* 0.0)  })
+		.attr('class','zoomEq')
+		.attr("width", function(d) {return d.width})
+		.attr("height", function(d) {return d.height})
+		.style('position','absolute')
+		.style('top',function(d) {return (d.y + d.height* 0.0)+'px'  })
+		.style('left',function(d) {return (d.x + d.width*0.0)+'px' })
+		.each(function (d) {
+			var formulaString = getStringIndex(d.row,d.col,i,j,state)
+			katex.render(
+				formulaString, d3.select(this).node(),
+				{displayMode: true}
+			)
+		})
+	}
+
+	// Draw results
+	d3.selectAll('.activeOut').remove()
+
+	selected = d3.select("#k2").select("#i"+i+"_"+j).data()[0]
+
+	console.log(selected)
+
+	d3.select("#k2").append('rect')
+	.attr('class','activeOut')
+	.attr('x',selected.x)
+	.attr('y',selected.y)
+	.attr('width',selected.width)
+	.attr('height',selected.height)
+
+
+
+	currentValue = (currentValue + 1) % (maxStep);
+
+}
+
+function calculateZoomKernel(dataElement){
+	return {
+				x : dataElement.x*2,
+				y : dataElement.y*2,
+				width : dataElement.width*2,
+				height : dataElement.width*2 			}
+}
+
+function calculateInputExt(state){
+
+	const rows = Number(state.inputH) + 2*Number(state.paddingV)
+	const cols = Number(state.inputV) + 2*Number(state.paddingH)
+
+	return {w : cols, h : rows}
+}
+
+function calculateKernelLimit(state){
+
+	var limitInput = calculateInputExt(state)
+
+	var kw  = Number(state.kernelH)
+	var stw = Number(state.strideH)
+
+
+	var posw = 0
+	var cordw = 0
+	while((posw+kw-1) < limitInput.w ){
+		posw = posw + stw
+		cordw = cordw + 1
+	}
+	console.log("limitW "+cordw)
+
+
+	var kv  = Number(state.kernelV)
+	var stv = Number(state.strideV)
+
+	var posv = 0
+	var cordv = 0
+	while((posv+kv-1) < limitInput.h ){
+		posv = posv + stv
+		cordv = cordv + 1
+	}
+	console.log("limitH "+cordv)
+
+
+	return {w : cordw, h : cordv }
+}
+
+
+
+
+
+
+
+
+
+function drawInputAndPad(element,data){
+
+	// Clean inputPad Cells
+	element.selectAll(".row").data([]).exit().remove()
+
+	var row = element.selectAll(".xxx").data(data).enter().append('g').attr('class','row')
+
+
+	var col = row.selectAll('.algo').data(function (d) {return d;}).enter()
+	.append('rect').attr('x',function (d) {return d.x;})
+	.attr('class', function (d) {return (d.isPad) ? 'padCell' : 'inputCell'})
+	.attr('y',function (d) {return d.y;}).attr('width',function (d) {return d.width;})
+	.attr('height',function (d) {return d.height;})
+	.style("stroke", "#222")
+
+}
+
+function drawKernelCells(element,data,groupTag,cellClass){
+
+
+	//Clean kernel cells
+	grid.select('#'+groupTag).remove()
+
+	element.append('g').attr('id',groupTag).selectAll('.'+cellClass).data(data).enter()
+	.append('rect').attr('x',function (d) {return d.x;})
+	.attr('class', cellClass)
+	.attr('id',function (d) {return "i"+d.row+"_"+d.col})
+	.attr('y',function (d) {return d.y;})
+	.attr('width',function (d) {return d.width;})
+	.attr('height',function (d) {return d.height;})
+	.style("stroke", "#222")
+
+}
+
+function generateOutCells(limitsKernel,height,width,x0,y0){
+
+	const cellW = width / limitsKernel.w
+	const cellH = height / limitsKernel.h
+
+	data = []
+	for (var i=0; i<limitsKernel.h; i++ ){
+		for (var j=0; j<limitsKernel.w; j++){
+
+
+			data.push({
+				x : x0+cellW*j,
+				y : y0+cellH*i,
+				index : i*limitsKernel.h+j,
+				row : i,
+				col : j,
+				width : cellW,
+				height : cellH
+			})
+		}
+
+	}
+	return data
+}
+
+
+function generateZoomCords(state,height,width,x0,y0){
+	const kernelRows = Number(state.kernelV);
+	const kernelCols = Number(state.kernelH);
+	const cellW = width / kernelCols
+	const cellH = height / kernelRows
+	const stdh = Number(state.strideH);
+	const stdv = Number(state.strideV); 
+
+
+	data = []
+	for (var i=0; i<kernelRows; i++ ){
+		for (var j=0; j<kernelCols; j++){
+
+
+
+			data.push({
+				x : x0+cellW*j,
+				y : y0+cellH*i,
+				row : i,
+				col : j,
+				width : cellW,
+				height : cellH
+			})
+		}
+
+	}
+	return data
+}
+
+function drawKernelZoom(element,state,height,width,x0,y0){
+
+
+	// kernelCellZoom
+	element.selectAll(".kernelCellZoom").remove()
+
+	const data = generateZoomCords(state,height,width,x0,y0)
+
+
+
+	element.selectAll('.kernelCellZoom').data(data).enter().append('rect')
+	.attr('class', 'kernelCellZoom')
+	.attr('x',function (d) {return d.x})
+	.attr('y',function (d) {return d.y})
+	.attr('width',function (d) {return d.width})
+	.attr('height',function (d) {return d.height})
+	.style("stroke", "#222")
+
+}
+
+
+function generateAll(){
+	console.log('changing things')
+	state = getSliders()
+	console.log(state)
+
+	limitsKernel = calculateKernelLimit(state);
+
+
+	// Generate data for input+pad cells. Also generate dataKernel
+	const data = generateBoard(state,canvasH/3,canvasW/3,marginH,marginW)
+	dataInputPad = data.dataInputPad
+	dataKernel = data.dataKernel
+
+	// draw cells with dataKernel
+	drawInputAndPad(grid,dataInputPad)
+
+
+	// Draw kernel cells
+	drawKernelCells(grid,dataKernel,"kernelGroup",'kernelCell')
+
+
+
+	// Define animation parameters interval step
+	currentValue=0
+	restartAnimation()
+	// Change slider values to match current kernel positions
+	d3.selectAll("#step").attr('max',(limitsKernel.w * limitsKernel.h)-1)
+
+
+	// Draw kernel zoom
+	drawKernelZoom(d3.select('#kernelZoom'),state,zoomTotalHeight,zoomTotalWidth,x0Zoom,y0Zoom)
+	
+
+	// Draw kernel result map
+	dataOut = generateOutCells(limitsKernel,300,300,850,30)
+
+	
+	ref2=drawKernelCells(d3.select('#kernelResult'),dataOut,"k2",'kernelOut')
+
+	d3.select('#k2').selectAll('text').remove()
+
+	d3.select('#k2').selectAll('.algo').data(dataOut).enter().append('text')
+	.attr("x", function(d) {return d.x+20})
+	.attr("y", function(d) {return d.y+20})
+	.text(function(d) {return d.index} )
+	.attr("font-family", "sans-serif")
+	.attr("font-size", "12px")
+	.attr("fill", "red");
+
+}
+
+
+
+
+function generateBoard(state,canvasH,canvasW,marginH,marginW) {
+
+	var padV = state.paddingV;
+	var padH = state.paddingH;
+
+	const ph = Number(padH)
+	const pv = Number(padV)
+
+	var inputShape = calculateInputExt(state)
+	const rows = inputShape.h
+	const cols = inputShape.w
+
+
+	const cellHeight = (canvasH - 2*marginH) / rows
+	const cellWidth = (canvasW - 2*marginW) / cols
+
+
+	console.log('Rows '+rows)
+	console.log('Cols '+cols)
+	console.log('CellHeight '+cellHeight)
+	console.log('CellWidth '+cellWidth)
+	// Create grid elements
+	dataA = []
+	for (var i=0; i<rows; i++) {
+		var row = new Array();
+		for (var j=0; j<cols; j++){
+			temp = isPadCell(i,j,rows,cols,state)
+			row.push({
+				x : j*cellWidth,
+				y : i*cellHeight,
+				row : i,
+				col : j,
+				width : cellWidth,
+				height : cellHeight ,
+				isPad : temp
+			})
+		}
+		dataA.push(row)
+	}
+
+	// Load kernel data
+	var kh=Number(state.kernelH)
+	var kv=Number(state.kernelV)
+	dataB = []
+	for (var i=0; i<kv; i++) {
+		for (var j=0; j<kh; j++){
+			dataB.push({
+				x : j*cellWidth,
+				y : i*cellHeight,
+				row : i,
+				col : j,
+				width : cellWidth,
+				height : cellHeight 			})
+		}
+	}
+
+	return {dataInputPad : dataA, dataKernel : dataB}
+
+}
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+</html>

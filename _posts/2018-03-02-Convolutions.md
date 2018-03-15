@@ -17,8 +17,13 @@ La convolucion tambien involucra muchos menos parametros a reutilizar sus pesos 
 
 ## Parametros de convolucion
 
+Una convolucion es realmente un producto punto que va desplazandose por el espacio es importante entender que hace cada uno de los parametros que la definen.
 
-definiciion de cada uno stride,padding,input,kernel size *
+
+Stride,
+padding,
+input,
+kernel size *
 
 *** A1 animacion con convolucion configurable
 

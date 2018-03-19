@@ -8,32 +8,56 @@ Siempre me ha gustado tratar de ver un tema desde varias perpectivas y ver como 
 
 # Convolucion
 
-La motivacion para que las redes comenzaran a usar convoluciones parte de la necesidad de encontrar una forma de aprovechar la estructura de los datos. Usualmente en imagenes los pixeles cercanos tienen bastante importancia al por ejemplo buscar un ojo una cara o cualquier tipo de patron visual. Si intentaramos usar una red MLP tiene que aprender a encontrar estas relaciones como un trabajo extra. Una convolucion es en cierta forma una MLP con un prior infinitamente fuerte con sus conexiones vecinas.
+# Eficiencia de parametros
 
-La convolucion tambien involucra muchos menos parametros a reutilizar sus pesos por tods los filtros. De hechos las tipicas redes de clasificacion teine su mayor cantidad de parametros al concadenar los filtros y usar una MLP.
+La motivacion para usar convoluciones en redes neuronales parte de utilizar datos como imagenes. En imagenes muchas veces la informacion de un pixel tiene mucha relacion con los pixeles vecinos y son estas relaciones la verdadera informacion a extraer de la imagen, por ejemplo pixeles negros rodeados de pixeles blancos podria indicar la presencia de ojos. Si bien una tipica red fully conected es capaz de aprender estas relaciones (al usar combinaciones de pixeles) es bastante poco eficiente al una unidad estar influenciada por todos los pixeles a la vez. Una alternativa mucho mas razonable podria ser solo pesos con pixeles cercanos. Esta necesidad de tomar solo pixeles cercanos hace que esta operaciones sea por ventanas.
+
+# Informacion espacial
+
+En una red MLP una capa solo genera una activacion, en cambio la convolucion por cada ventana genera una activacion. Esta es una gran diferencia pues permite guardar informacion espacial o el donde esa ubicada tal activacion. 
 
 
 (convolucion o correlacion) **
 
 ## Parametros de convolucion
 
-Una convolucion es realmente un producto punto que va desplazandose por el espacio es importante entender que hace cada uno de los parametros que la definen.
+La convolucion viene determinada por los siguientes parametros :
 
+* Kernel: Una capa fully conected en el fondo es solamente un producto punto entre una entrada y un vector de pesos. La convolucion es otra vez un producto punto, pero que se define en una ventana de pesos. Esta ventana de pesos se denomina kernel, el cual en el caso 2D es una matriz de valores. 
 
-Stride,
-padding,
-input,
-kernel size *
+* Stride: Corresponde a el paso en cada dimension para cada ventana.
+
+* Padding: Corresponde a agregar ceros u otro valor en los bordes de la entrada.
 
 *** A1 animacion con convolucion configurable
 
-(ecuacion de la convolucion general) **
+Si bien hablare principalmente de la convolucion en 2D esta se puede definir en dimensiones mayores como: 
+
+\sum_{k_1=-\infty}^{\infty} \sum_{k_2=-\infty}^{\infty}...\sum_{k_M=-\infty}^{\infty} h(k_1,k_2,...,k_M)x(n_1-k_1,n_2-k_2,...,n_M-k_M)
+ [1]
+
+Que viene siendo aplicar el mismo concepto de mover una ventana y multiplicar solo que ahora en un cubo, hiper cubo, etc.
+
+[1] https://en.wikipedia.org/wiki/Multidimensional_discrete_convolution
 
 # Convolucion como matrix
 
+Una asociacion util es entender una capa fully conected como una multiplicacion por una matriz.
+
+FORMULA MATRIZ
+
+
 Hablar de equivalencia de convolucion a multiplicacion de matriz toepliz  ***
 
+Como mencione antes las convoluciones podrian generarse por capas fully conected esto se puede en cierta forma demostrar utilizando estas matrices.
+
 *** A2 animacion de matriz generica con equivalencia a convolucion 
+
+Es decir podemos generar dado un filtro convolucional la matriz con sus unidades fully conected equivalentes. Esto es un claro ejemplo de como las convoluciones ahorran complejidad a la red ya que un solo filtro involucra muchas unidades ocultas "simuladas". 
+
+Esta asociacion tambien tiene importancia para la convolucion transpuesta como mencionare mas abajo.
+
+
 
 # Conectividad de filtros
 

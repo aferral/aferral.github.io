@@ -10,14 +10,12 @@ Siempre me ha gustado tratar de ver un tema desde varias perpectivas y ver como 
 
 # Eficiencia de parametros
 
-La motivacion para usar convoluciones en redes neuronales parte de utilizar datos como imagenes. En imagenes muchas veces la informacion de un pixel tiene mucha relacion con los pixeles vecinos y son estas relaciones la verdadera informacion a extraer de la imagen, por ejemplo pixeles negros rodeados de pixeles blancos podria indicar la presencia de ojos. Si bien una tipica red fully conected es capaz de aprender estas relaciones (al usar combinaciones de pixeles) es bastante poco eficiente al una unidad estar influenciada por todos los pixeles a la vez. Una alternativa mucho mas razonable podria ser solo pesos con pixeles cercanos. Esta necesidad de tomar solo pixeles cercanos hace que esta operaciones sea por ventanas.
+La motivacion para usar convoluciones en redes neuronales parte de utilizar datos como imagenes. En imagenes muchas veces la informacion de un pixel tiene mucha relacion con los pixeles vecinos y son estas relaciones la verdadera informacion a extraer de la imagen, por ejemplo pixeles negros rodeados de pixeles blancos podria indicar la presencia de ojos. Si bien una tipica red fully conected es capaz de aprender estas relaciones (al usar combinaciones de pixeles) es bastante poco eficiente ya que cada unidad va tener que aprender que casi todos los pesos son ceros. Una alternativa mucho mas razonable podria ser solo pesos con pixeles cercanos. Esta necesidad de tomar solo pixeles cercanos hace que esta operaciones sea por ventanas.
 
 # Informacion espacial
 
 En una red MLP una capa solo genera una activacion, en cambio la convolucion por cada ventana genera una activacion. Esta es una gran diferencia pues permite guardar informacion espacial o el donde esa ubicada tal activacion. 
 
-
-(convolucion o correlacion) **
 
 ## Parametros de convolucion
 
@@ -42,18 +40,16 @@ Que viene siendo aplicar el mismo concepto de mover una ventana y multiplicar so
 
 # Convolucion como matrix
 
-Una asociacion util es entender una capa fully conected como una multiplicacion por una matriz.
+Es util entender una capa fully conected como una multiplicacion por una matriz. Y a su vez se puede expresar el resultado de una convolucion como una serie de unidades fully conected que solo tienen conexiones de forma local (aunque normalmente las convoluciones no se implementen de esta forma) de esta forma se observa la cantidad de parametros que son posibles de ahorrar. 
 
+$a /cdot b$
 FORMULA MATRIZ
 
 
-Hablar de equivalencia de convolucion a multiplicacion de matriz toepliz  ***
 
-Como mencione antes las convoluciones podrian generarse por capas fully conected esto se puede en cierta forma demostrar utilizando estas matrices.
 
 *** A2 animacion de matriz generica con equivalencia a convolucion 
 
-Es decir podemos generar dado un filtro convolucional la matriz con sus unidades fully conected equivalentes. Esto es un claro ejemplo de como las convoluciones ahorran complejidad a la red ya que un solo filtro involucra muchas unidades ocultas "simuladas". 
 
 Esta asociacion tambien tiene importancia para la convolucion transpuesta como mencionare mas abajo.
 
@@ -61,17 +57,22 @@ Esta asociacion tambien tiene importancia para la convolucion transpuesta como m
 
 # Conectividad de filtros
 
-Si se habla que celda de entrada es influenciada por cada posicion de filtro tendremos este driagra. De ahora no parece mucha utilidad pero la tendra. ***
+Si se habla de la forma en que cada de entrada es influenciada por cada posicion de filtro tendremos este diagrama. De ahora no parece mucha utilidad pero la tendra. 
+
 
 *** A3 diagrama conectividad filtros
 
-# Formulas de salida
 
 # Transposed convolucion
 
-Diversos nombres que tiene y porque no deberia llamarse deconvolucion.
+Esta capa muchas veces se conoce como fractionally strided convolution, transposed convolution o  mal nombrada deconvolucion. Para explicar esta operacion supongamos que tenemos una entrada, un kernel y una salida resultante de la convolucion de ciertos parametros de la entrada con el kernel, la tranposed convolution son los parametros de convolucion que producirian dado la salida denuevo el patron de conectividad de la entrada con el mismo kernel. Lo importante es que la transposed convolution no es la operacion inversa de la convolucion ya que no produce los mismos VALORES sino que reproduce la CONECTIVIDAD. Por esto no debe llamarse deconvolucion. 
 
-MOtivacion lograr mismo size de convolucion con mismo filtro. Usos en diversas aplicaciones
+Veamos un ejemplo:
+
+EJEMPLO
+
+Ahora expresemos esto en las diversas formas de entender la convolucion que mencione mas arriba.
+
 
 # Forma de derivarla por conectividad
 
@@ -81,7 +82,6 @@ MOtivacion lograr mismo size de convolucion con mismo filtro. Usos en diversas a
 
 # Formulas de salida y calculo de conv a deconv.
 
-Enter text in [Markdown](http://daringfireball.net/projects/markdown/). Use the toolbar above, or click the **?** button for formatting help.
 
 
 Dudas interesantes (extras)

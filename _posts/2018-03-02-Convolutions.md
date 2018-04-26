@@ -24,21 +24,25 @@ Como mencionaba las convoluciones por unidad generan un mapa de activaciones. Po
 
 A modo de resumen las convoluciones ahorran parametros ya que se requieren muchas unidades fully conected para encontrar caracteristicas en diversas localizaciones, permiten tener operaciones invariantes a traslacion al ser la misma operacion aplicada en diversas posiciones y mantienen informacion espacial al generar mapas de activaciones.
 
+Y tambien hay que recordar que el asunto es igual que en las redes MLP a medida que logramos colocar mas capas los conceptos se vuelven mas abstractos. Ya que si bien en las primeras capas de convolucion solo encontraremos bordes o patrones simples en las ultimas llegamos a encontrar objetos en casos de problemas de clasificacion como IMAGENET.
 
 
 ## Parametros de convolucion
 
 La convolucion viene determinada por los siguientes parametros :
 
-* Kernel: Una capa fully conected en el fondo es solamente un producto punto entre una entrada y un vector de pesos. La convolucion es otra vez un producto punto, pero que se define en una ventana de pesos. Esta ventana de pesos se denomina kernel, el cual en el caso 2D es una matriz de valores. 
+* Kernel: Una capa fully conected en el fondo es solamente un producto punto entre una entrada y un vector de pesos. La convolucion es otra vez un producto punto, pero que se define en una ventana de pesos. Los pesos de esta ventana se llaman kernel, el cual en el caso 2D es una matriz de valores. 
 
-* Stride: Corresponde a el paso en cada dimension para cada ventana.
+* Stride: Corresponde a el paso en cada dimension para cada ventana. Stride 1 significa que avanzamos un pixel.
 
-* Padding: Corresponde a agregar ceros u otro valor en los bordes de la entrada. Dentro de estos padding estan los mas famosos VALID y SAME. 
+* Padding: Indica que hacer en los bordes de la imagen. Normalmente se usa cero padding que es agregar ceros u otro valor en los bordes de la entrada. Dentro de estos padding estan los mas famosos VALID y SAME. 
+
+Para entender mejor como varia la convolucion 2D respecto a estos parametros tengo la siguiente animacion:
 
 *** A1 animacion con convolucion configurable
 
-Si bien hablare principalmente de la convolucion en 2D esta se puede definir en dimensiones mayores como: 
+
+Ahora la convolucion no solo es 2D y se puede definir  en dimensiones mayores como: 
 
 \sum_{k_1=-\infty}^{\infty} \sum_{k_2=-\infty}^{\infty}...\sum_{k_M=-\infty}^{\infty} h(k_1,k_2,...,k_M)x(n_1-k_1,n_2-k_2,...,n_M-k_M)
  [1]
@@ -75,8 +79,6 @@ Esta capa muchas veces se conoce como fractionally strided convolution, transpos
 
 Veamos un ejemplo:
 
-EJEMPLO
-
 Ahora expresemos esto en las diversas formas de entender la convolucion que mencione mas arriba.
 
 ## Por conectividad
@@ -87,7 +89,7 @@ Ahora expresemos esto en las diversas formas de entender la convolucion que menc
 
 ## Formulas de salida y calculo de conv a deconv.
 
-
+La gran importancia de las tranpsosed convolution es que permite aumentar las dimensiones de mapas de activacion. Ejemplos de estos son redes que generan imagenes a partir de una representacion de minor dimensionalidad estos modelos han tenido gran impacto en los ultimos anos como son las encoders convolucionales, GANS, VAE convolucional, etc.
 
 # Referencias y links interesantes
 [1] Detalle sobre calculos de parametros de salida. https://arxiv.org/pdf/1603.07285.pdf

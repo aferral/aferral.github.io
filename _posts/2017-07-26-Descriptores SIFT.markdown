@@ -17,3 +17,6 @@ Los descriptores SIFT permiten obtener de una imagen muchas caracteristicas que 
 
 Se menciona que SIFT es bastante robusto a cosas como 
 invariant to uniform scaling, orientation, illumination changes, and partially invariant to affine distortion.[2]
+
+
+$$a^2 \cdot b^2 = c^2$$

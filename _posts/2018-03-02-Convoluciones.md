@@ -115,6 +115,8 @@ En mayor detalle esta este ejemplo. Notar como se mantiene el patron de conectiv
 
 ACA EJEMPLO PLANTEADO CON VALORES DE MATRIZ
 
+Para aun mas detalles tengo este ipython notebook donde calcule todas estas cosas.
+
 # Deduccion a partir de visualizacion por superposicion (lo mismo que conectividad)
 
 Una forma mucho mas facil de observar que es lo que ocurre es observando el patron de conceccion detalladamente y observar la forma en que se aplica la convolucion en primer lugar.

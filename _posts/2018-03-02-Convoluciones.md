@@ -129,11 +129,11 @@ $$
 
 Podemos expresar entonces como
 
-$$ X \cdot U = O \quad  \| \quad (1,F) \cdot (F,U) = (1,U)$$
+$$ X \cdot U = O \quad  \| \quad (1,f) \cdot (f,u) = (1,u)$$
 
 Ahora podemos definir otra operacion (notar que tambien es una convolucion) de la siguiente forma.
 
-$$ O \cdot T = C \quad  \| \quad (1,U) \cdot (U,F) = (1,F)$$
+$$ O \cdot T = C \quad  \| \quad (1,u) \cdot (u,f) = (1,f)$$
 
 Donde se cumple que la matrix $$T$$ tiene dimensiones transpuestas a la matriz $$U$$
 

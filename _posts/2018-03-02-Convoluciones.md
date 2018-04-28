@@ -101,7 +101,33 @@ Por ejemplo en este caso tenemos que una convolucion ASDFJASLDJ genera salidas d
 
 # Deduciendo a partir de convolucion como multiplicaciones de matrices
 
-Esta es la forma mas simple de obtener una operacion que mantenga la conectividad. Para esto volvemos a ver las convoluciones como una multiplicacion de matrices. Con esto tenemos que las matrices y las dimensiones involucradas en una convolucion de un puro filtro por toda la imagen seria:
+Esta es la forma mas simple de obtener una operacion que mantenga la conectividad. Para esto volvemos a ver las convoluciones como una multiplicacion de matrices. 
+
+Sea la convolucion observada en los ejemplos anteriores. Notar que aca simplemente nombre el padding como parte de la entrada esto no tiene mayor importancia ya que es un caso hasta mas general.
+
+$$
+\left[\begin{matrix}I_{00} & I_{01} & I_{02} & I_{03} & I_{04}\\I_{10} & I_{11} & I_{12} & I_{13} & I_{14}\\I_{20} & I_{21} & I_{22} & I_{23} & I_{24}\\I_{30} & I_{31} & I_{32} & I_{33} & I_{34}\\I_{40} & I_{41} & I_{42} & I_{43} & I_{44}\end{matrix}\right]
+$$
+
+Estiremos la entrada del ejemplo a un vector para usar multiplicacion de matrices.
+
+$$
+\left[\begin{array}{ccccccccccccccccccccccccc}I_{00} & I_{01} & I_{02} & I_{03} & I_{04} & I_{10} & I_{11} & I_{12} & I_{13} & I_{14} & I_{20} & I_{21} & I_{22} & I_{23} & I_{24} & I_{30} & I_{31} & I_{32} & I_{33} & I_{34} & I_{40} & I_{41} & I_{42} & I_{43} & I_{44}\end{array}\right]
+$$
+
+Luego las posiciones de convoluciones un filtro involucradas son
+
+
+$$\left [ \left[\begin{matrix}k_{00} & k_{01} & k_{02} & 0 & 0\\k_{10} & k_{11} & k_{12} & 0 & 0\\k_{20} & k_{21} & k_{22} & 0 & 0\\0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0\end{matrix}\right], \quad \left[\begin{matrix}0 & 0 & k_{00} & k_{01} & k_{02}\\0 & 0 & k_{10} & k_{11} & k_{12}\\0 & 0 & k_{20} & k_{21} & k_{22}\\0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0\end{matrix}\right], \quad \left[\begin{matrix}0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0\\k_{00} & k_{01} & k_{02} & 0 & 0\\k_{10} & k_{11} & k_{12} & 0 & 0\\k_{20} & k_{21} & k_{22} & 0 & 0\end{matrix}\right], \quad \left[\begin{matrix}0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0\\0 & 0 & k_{00} & k_{01} & k_{02}\\0 & 0 & k_{10} & k_{11} & k_{12}\\0 & 0 & k_{20} & k_{21} & k_{22}\end{matrix}\right]\right ]$$
+
+Ahora tomamos cada una de estas matrices y la estiramos en un vector. No es dificil darse cuenta que a convolucion es la multiplicacion de matrices entre el vector estirado de entrada con la matriz formada por estirar y apilar las matrices anteriores.
+
+
+$$
+\left[\begin{matrix}k_{00} & 0 & 0 & 0\\k_{01} & 0 & 0 & 0\\k_{02} & k_{00} & 0 & 0\\0 & k_{01} & 0 & 0\\0 & k_{02} & 0 & 0\\k_{10} & 0 & 0 & 0\\k_{11} & 0 & 0 & 0\\k_{12} & k_{10} & 0 & 0\\0 & k_{11} & 0 & 0\\0 & k_{12} & 0 & 0\\k_{20} & 0 & k_{00} & 0\\k_{21} & 0 & k_{01} & 0\\k_{22} & k_{20} & k_{02} & k_{00}\\0 & k_{21} & 0 & k_{01}\\0 & k_{22} & 0 & k_{02}\\0 & 0 & k_{10} & 0\\0 & 0 & k_{11} & 0\\0 & 0 & k_{12} & k_{10}\\0 & 0 & 0 & k_{11}\\0 & 0 & 0 & k_{12}\\0 & 0 & k_{20} & 0\\0 & 0 & k_{21} & 0\\0 & 0 & k_{22} & k_{20}\\0 & 0 & 0 & k_{21}\\0 & 0 & 0 & k_{22}\end{matrix}\right]
+$$
+
+Podemos expresar entonces como
 
 $$ X \cdot U = O \quad  \| \quad (N,F) \cdot (F,U) = (N,U)$$
 
@@ -111,9 +137,15 @@ $$ O \cdot T = C \quad  \| \quad (N,U) \cdot (U,F) = (N,F)$$
 
 Donde se cumple que la matrix $$T$$ tiene dimensiones transpuestas a la matriz $$U$$
 
-En mayor detalle esta este ejemplo. Notar como se mantiene el patron de conectividad.
+Para combrobar que efectivamente este tiene sentido se puede observar la conectividad entre el filtro de salida O y lo que produce esta multiplicacion transpuesta.
 
-ACA EJEMPLO PLANTEADO CON VALORES DE MATRIZ
+$$
+\left[\begin{matrix}O_{00} & O_{01}\\O_{10} & O_{11}\end{matrix}\right]
+$$
+
+$$
+\left[\begin{matrix}O_{00} k_{00} & O_{00} k_{01} & O_{00} k_{02} + O_{01} k_{00} & O_{01} k_{01} & O_{01} k_{02}\\O_{00} k_{10} & O_{00} k_{11} & O_{00} k_{12} + O_{01} k_{10} & O_{01} k_{11} & O_{01} k_{12}\\O_{00} k_{20} + O_{10} k_{00} & O_{00} k_{21} + O_{10} k_{01} & O_{00} k_{22} + O_{01} k_{20} + O_{10} k_{02} + O_{11} k_{00} & O_{01} k_{21} + O_{11} k_{01} & O_{01} k_{22} + O_{11} k_{02}\\O_{10} k_{10} & O_{10} k_{11} & O_{10} k_{12} + O_{11} k_{10} & O_{11} k_{11} & O_{11} k_{12}\\O_{10} k_{20} & O_{10} k_{21} & O_{10} k_{22} + O_{11} k_{20} & O_{11} k_{21} & O_{11} k_{22}\end{matrix}\right]
+$$
 
 Para aun mas detalles tengo este ipython notebook donde calcule todas estas cosas.
 
@@ -136,5 +168,3 @@ Espero que con todo esto se entienda la importancia tanto de la convolucion como
 4. Detalles del calculo de padding SAME implementacion tensorflow https://www.tensorflow.org/api_guides/python/nn#Notes_on_SAME_Convolution_Padding
 5. Un buen video donde explican transposed convolution https://www.youtube.com/watch?v=Xk7myx9_OmU&t=392s
 6. https://en.wikipedia.org/wiki/Multidimensional_discrete_convolution
-
-

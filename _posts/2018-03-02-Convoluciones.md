@@ -73,7 +73,7 @@ Si se habla de la forma en que cada de entrada es influenciada por cada posicion
 ![Figura 3: Diagrama de conexiones de los filtros .](https://image.ibb.co/bJKX1x/fig3.png =50x)
 
 
-
+(Diagrama en latex???)
 
 
 # Transposed convolucion
@@ -85,8 +85,9 @@ La gran importancia de las tranpsosed convolution es que permite aumentar las di
 
 Veamos un ejemplo y como obtener la transposed convolution dada varias persepctivas.
 
-ACA EJEMPLO DE The transpose of convolving a 3 × 3 kernel over a 5 × 5 input using
-2 × 2 strides
+ACA EJEMPLO DE CONVOLUCION 3X3 kernel sobre 3x3 Input con pad 1x1.
+
+Lo que quiero obtener es una operacion que dada el mapa 2x2 como entrada y el mismo kernel 3x3 pueda obtener otro mapa de entrada 3x3 con la misma conectividad de la convolucion original. Con conectividad me refiero a que si la salida original fue armada por 9 unidades (3x3 este caso) deberia influenciar 9 bloques en las mismas posiciones esta nueva operacion. 
 
 # Deducir a partir de parametros de convoluciones
 
@@ -97,6 +98,8 @@ Lista de operaciones
 
 
 Por ejemplo en este caso tenemos que una convolucion ASDFJASLDJ genera salidas de forma ASDFASDJLK. Por lo que en este caso la operacion convolucion equivalente se ve asi:
+
+Lo cual efectivamente resuelve el caso pedido. Aca quiero mencionar que no entre en mucho detalle de lo que ocurre donde hay stride fraccional (casos donde hay stride entero) para revisar esos casos ir a [1] y que son un caso especial.
 
 
 # Deduciendo a partir de convolucion como multiplicaciones de matrices
@@ -149,7 +152,7 @@ $$
 C = \left[\begin{matrix}O_{00} k_{00} & O_{00} k_{01} & O_{00} k_{02} + O_{01} k_{00} & O_{01} k_{01} & O_{01} k_{02}\\O_{00} k_{10} & O_{00} k_{11} & O_{00} k_{12} + O_{01} k_{10} & O_{01} k_{11} & O_{01} k_{12}\\O_{00} k_{20} + O_{10} k_{00} & O_{00} k_{21} + O_{10} k_{01} & O_{00} k_{22} + O_{01} k_{20} + O_{10} k_{02} + O_{11} k_{00} & O_{01} k_{21} + O_{11} k_{01} & O_{01} k_{22} + O_{11} k_{02}\\O_{10} k_{10} & O_{10} k_{11} & O_{10} k_{12} + O_{11} k_{10} & O_{11} k_{11} & O_{11} k_{12}\\O_{10} k_{20} & O_{10} k_{21} & O_{10} k_{22} + O_{11} k_{20} & O_{11} k_{21} & O_{11} k_{22}\end{matrix}\right]
 $$
 
-Si quieres mas detalles de esto o un paso a paso aca esta el jupyter notebook que uso para generarlos ([Link](https://drive.google.com/file/d/1wQXRsPqAiFC_DoiJ8paraslB7DlqxD6j/view?usp=sharing). Descargar y usar local no funciona bien en colaboratory).
+Si quieres mas detalles de esto o un paso a paso aca esta el jupyter notebook que uso para generarlos ([Link](https://drive.google.com/file/d/1wQXRsPqAiFC_DoiJ8paraslB7DlqxD6j/view?usp=sharing). Usar de forma local no funciona bien en colaboratory).
 
 # Deduccion a partir de visualizacion por superposicion (lo mismo que conectividad)
 

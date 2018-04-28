@@ -112,7 +112,7 @@ $$
 Estiremos la entrada del ejemplo a un vector para usar multiplicacion de matrices.
 
 $$
-\left[\begin{array}{ccccccccccccccccccccccccc}I_{00} & I_{01} & I_{02} & I_{03} & I_{04} & I_{10} & I_{11} & I_{12} & I_{13} & I_{14} & I_{20} & I_{21} & I_{22} & I_{23} & I_{24} & I_{30} & I_{31} & I_{32} & I_{33} & I_{34} & I_{40} & I_{41} & I_{42} & I_{43} & I_{44}\end{array}\right]
+X = \left[\begin{array}{ccccccccccccccccccccccccc}I_{00} & I_{01} & I_{02} & I_{03} & I_{04} & I_{10} & I_{11} & I_{12} & I_{13} & I_{14} & I_{20} & I_{21} & I_{22} & I_{23} & I_{24} & I_{30} & I_{31} & I_{32} & I_{33} & I_{34} & I_{40} & I_{41} & I_{42} & I_{43} & I_{44}\end{array}\right]
 $$
 
 Luego las posiciones de convoluciones un filtro involucradas son
@@ -124,7 +124,7 @@ Ahora tomamos cada una de estas matrices y la estiramos en un vector. No es difi
 
 
 $$
-\left[\begin{matrix}k_{00} & 0 & 0 & 0\\k_{01} & 0 & 0 & 0\\k_{02} & k_{00} & 0 & 0\\0 & k_{01} & 0 & 0\\0 & k_{02} & 0 & 0\\k_{10} & 0 & 0 & 0\\k_{11} & 0 & 0 & 0\\k_{12} & k_{10} & 0 & 0\\0 & k_{11} & 0 & 0\\0 & k_{12} & 0 & 0\\k_{20} & 0 & k_{00} & 0\\k_{21} & 0 & k_{01} & 0\\k_{22} & k_{20} & k_{02} & k_{00}\\0 & k_{21} & 0 & k_{01}\\0 & k_{22} & 0 & k_{02}\\0 & 0 & k_{10} & 0\\0 & 0 & k_{11} & 0\\0 & 0 & k_{12} & k_{10}\\0 & 0 & 0 & k_{11}\\0 & 0 & 0 & k_{12}\\0 & 0 & k_{20} & 0\\0 & 0 & k_{21} & 0\\0 & 0 & k_{22} & k_{20}\\0 & 0 & 0 & k_{21}\\0 & 0 & 0 & k_{22}\end{matrix}\right]
+U = \left[\begin{matrix}k_{00} & 0 & 0 & 0\\k_{01} & 0 & 0 & 0\\k_{02} & k_{00} & 0 & 0\\0 & k_{01} & 0 & 0\\0 & k_{02} & 0 & 0\\k_{10} & 0 & 0 & 0\\k_{11} & 0 & 0 & 0\\k_{12} & k_{10} & 0 & 0\\0 & k_{11} & 0 & 0\\0 & k_{12} & 0 & 0\\k_{20} & 0 & k_{00} & 0\\k_{21} & 0 & k_{01} & 0\\k_{22} & k_{20} & k_{02} & k_{00}\\0 & k_{21} & 0 & k_{01}\\0 & k_{22} & 0 & k_{02}\\0 & 0 & k_{10} & 0\\0 & 0 & k_{11} & 0\\0 & 0 & k_{12} & k_{10}\\0 & 0 & 0 & k_{11}\\0 & 0 & 0 & k_{12}\\0 & 0 & k_{20} & 0\\0 & 0 & k_{21} & 0\\0 & 0 & k_{22} & k_{20}\\0 & 0 & 0 & k_{21}\\0 & 0 & 0 & k_{22}\end{matrix}\right]
 $$
 
 Podemos expresar entonces como
@@ -147,7 +147,7 @@ $$
 \left[\begin{matrix}O_{00} k_{00} & O_{00} k_{01} & O_{00} k_{02} + O_{01} k_{00} & O_{01} k_{01} & O_{01} k_{02}\\O_{00} k_{10} & O_{00} k_{11} & O_{00} k_{12} + O_{01} k_{10} & O_{01} k_{11} & O_{01} k_{12}\\O_{00} k_{20} + O_{10} k_{00} & O_{00} k_{21} + O_{10} k_{01} & O_{00} k_{22} + O_{01} k_{20} + O_{10} k_{02} + O_{11} k_{00} & O_{01} k_{21} + O_{11} k_{01} & O_{01} k_{22} + O_{11} k_{02}\\O_{10} k_{10} & O_{10} k_{11} & O_{10} k_{12} + O_{11} k_{10} & O_{11} k_{11} & O_{11} k_{12}\\O_{10} k_{20} & O_{10} k_{21} & O_{10} k_{22} + O_{11} k_{20} & O_{11} k_{21} & O_{11} k_{22}\end{matrix}\right]
 $$
 
-Para aun mas detalles tengo este ipython notebook donde calcule todas estas cosas.
+Si quieres mas detalles de esto o un paso a paso aca esta el jupyter notebook que uso para generarlos ([Link](https://drive.google.com/file/d/1wQXRsPqAiFC_DoiJ8paraslB7DlqxD6j/view?usp=sharing). Descargar y usar local no funciona bien en colaboratory).
 
 # Deduccion a partir de visualizacion por superposicion (lo mismo que conectividad)
 

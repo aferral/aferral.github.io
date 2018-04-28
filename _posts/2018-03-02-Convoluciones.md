@@ -129,22 +129,24 @@ $$
 
 Podemos expresar entonces como
 
-$$ X \cdot U = O \quad  \| \quad (N,F) \cdot (F,U) = (N,U)$$
+$$ X \cdot U = O \quad  \| \quad (1,F) \cdot (F,U) = (1,U)$$
 
 Ahora podemos definir otra operacion (notar que tambien es una convolucion) de la siguiente forma.
 
-$$ O \cdot T = C \quad  \| \quad (N,U) \cdot (U,F) = (N,F)$$
+$$ O \cdot T = C \quad  \| \quad (1,U) \cdot (U,F) = (1,F)$$
 
 Donde se cumple que la matrix $$T$$ tiene dimensiones transpuestas a la matriz $$U$$
 
 Para combrobar que efectivamente este tiene sentido se puede observar la conectividad entre el filtro de salida O y lo que produce esta multiplicacion transpuesta.
 
 $$
-\left[\begin{matrix}O_{00} & O_{01}\\O_{10} & O_{11}\end{matrix}\right]
+O=\left[\begin{matrix}O_{00} & O_{01}\\O_{10} & O_{11}\end{matrix}\right]
 $$
 
+Luego C seria
+
 $$
-\left[\begin{matrix}O_{00} k_{00} & O_{00} k_{01} & O_{00} k_{02} + O_{01} k_{00} & O_{01} k_{01} & O_{01} k_{02}\\O_{00} k_{10} & O_{00} k_{11} & O_{00} k_{12} + O_{01} k_{10} & O_{01} k_{11} & O_{01} k_{12}\\O_{00} k_{20} + O_{10} k_{00} & O_{00} k_{21} + O_{10} k_{01} & O_{00} k_{22} + O_{01} k_{20} + O_{10} k_{02} + O_{11} k_{00} & O_{01} k_{21} + O_{11} k_{01} & O_{01} k_{22} + O_{11} k_{02}\\O_{10} k_{10} & O_{10} k_{11} & O_{10} k_{12} + O_{11} k_{10} & O_{11} k_{11} & O_{11} k_{12}\\O_{10} k_{20} & O_{10} k_{21} & O_{10} k_{22} + O_{11} k_{20} & O_{11} k_{21} & O_{11} k_{22}\end{matrix}\right]
+C = \left[\begin{matrix}O_{00} k_{00} & O_{00} k_{01} & O_{00} k_{02} + O_{01} k_{00} & O_{01} k_{01} & O_{01} k_{02}\\O_{00} k_{10} & O_{00} k_{11} & O_{00} k_{12} + O_{01} k_{10} & O_{01} k_{11} & O_{01} k_{12}\\O_{00} k_{20} + O_{10} k_{00} & O_{00} k_{21} + O_{10} k_{01} & O_{00} k_{22} + O_{01} k_{20} + O_{10} k_{02} + O_{11} k_{00} & O_{01} k_{21} + O_{11} k_{01} & O_{01} k_{22} + O_{11} k_{02}\\O_{10} k_{10} & O_{10} k_{11} & O_{10} k_{12} + O_{11} k_{10} & O_{11} k_{11} & O_{11} k_{12}\\O_{10} k_{20} & O_{10} k_{21} & O_{10} k_{22} + O_{11} k_{20} & O_{11} k_{21} & O_{11} k_{22}\end{matrix}\right]
 $$
 
 Si quieres mas detalles de esto o un paso a paso aca esta el jupyter notebook que uso para generarlos ([Link](https://drive.google.com/file/d/1wQXRsPqAiFC_DoiJ8paraslB7DlqxD6j/view?usp=sharing). Descargar y usar local no funciona bien en colaboratory).

@@ -137,7 +137,7 @@ $$ O \cdot T = C \quad  \| \quad (1,u) \cdot (u,f) = (1,f)$$
 
 Donde se cumple que la matrix $$T$$ tiene dimensiones transpuestas a la matriz $$U$$
 
-Para combrobar que efectivamente este tiene sentido se puede observar la conectividad entre el filtro de salida O y lo que produce esta multiplicacion transpuesta.
+Para combrobar que efectivamente este tiene sentido se puede que ocurre al multiplicar $$O$$ con $$U^{T}$$. Se observa como la conectividad entre el filtro de salida y el kernel es consistente a los diagramas de conectividad originales. Es decir la salida esta colocandose justamente de la misma forma que fue usada en un inicio.
 
 $$
 O=\left[\begin{matrix}O_{00} & O_{01}\\O_{10} & O_{11}\end{matrix}\right]

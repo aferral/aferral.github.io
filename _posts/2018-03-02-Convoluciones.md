@@ -156,9 +156,10 @@ Si quieres mas detalles de esto o un paso a paso aca esta el jupyter notebook qu
 
 # Deduccion a partir de visualizacion por superposicion (lo mismo que conectividad)
 
-Una forma mucho mas facil de observar que es lo que ocurre es observando el patron de conceccion detalladamente y observar la forma en que se aplica la convolucion en primer lugar.
+Una forma mucho mas facil de observar que es lo que ocurre es observando el patron de conceccion detalladamente y observar que al realizar la convolucion estamos tomando todos los valores de la ventana y colapsando el patron y al hacer la convolucion transpuesta tomamos el valor central y lo expandimos a la conectivida dado los pesos. Por mi parte me gusta ver esta operacion como si tuvieses un estampador que alimentas con un valor arriba y saca 9 valores abajo el cual vas aplicando por las mismas posiciones que se aplicaron los filtros, de forma que se produce el patron de conectividad.
 
 ACA EJEMPLO CON CONECTIVIDAD.
+(Colores de filtro y traslape)
 
 
 # En resumen

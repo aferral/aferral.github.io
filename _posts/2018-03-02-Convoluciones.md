@@ -3,64 +3,63 @@ layout: post
 published: true
 ---
 
-La idea de este post es tratar de introducir los parametros de la convolucion discreta. Me centrare en una parte muy especifica que trata de explicar intuitivamente como funcionan los parametros respecto a la operacion y la relacion entre convolucion/conv. transpuesta.
-
-Siempre me ha gustado tratar de ver un tema desde varias perpectivas y ver como estas son equivalentes. Con esta idea en mente tratare de mostrar las convoluciones como filtros como matrices y sus conectividades.
-
-
-
-
+La idea de este post es tratar de explicar de forma sencilla (espero) la utilidad de la convolucion discreta en el contexto de entrenar redes neuronales. Me centrare en explicar intuitivamente como funcionan los parametros respecto a la operacion y de paso explicar de donde sale la convolucion transpuesta.
 
 # Motivacion: ¿Por que usar la convolucion?
 
-
-
-La motivacion para usar convoluciones en redes neuronales parte de utilizar datos como imagenes. En imagenes muchas veces la informacion de un pixel tiene mucha relacion con los pixeles vecinos y son estas relaciones la verdadera informacion a extraer de la imagen, por ejemplo pixeles negros rodeados de pixeles blancos podria indicar la presencia de ojos. Si bien una tipica red fully conected es capaz de aprender estas relaciones (al usar combinaciones de pixeles) es bastante poco eficiente ya que cada unidad va tener que aprender que casi todos los pesos son ceros.
+La motivacion para usar convoluciones en redes neuronales parte de utilizar datos como imagenes. En imagenes muchas veces la informacion de un pixel esta altamente relacionada con sus pixeles vecinos y son estos patrones a nivel macro los que realmente importan para el problema a resolver. Por ejemplo en un problema de clasificacion de imagenes areas de pixeles negros rodeados por areas circulares de pixeles blancos podria indicar la presencia de ojos. Si bien una tipica red fully conected es capaz de aprender estas relaciones (al usar combinaciones de pixeles) demostrare que es bastante poco eficiente al estar observando la imagen en su globalidad.
 
 ![Figura 1: Ejemplo de MLP no puede detectar patrones invariantes a traslaciones.](https://image.ibb.co/ihHFmx/fig1.png =50x)
 
-Una caricatura de esto podria ser la siguiente. Supongamos que quiero una red que se active si encuentra en patron 1,0,1 en la entrada aca estoy tratando que la red detecte un patron localizado. En la figura de ejemplo se observa que dado una imagen de entrenamiento una red tipica va tratar de ajustar sus pesos a la localizacion exacta al ser pesos para cada unidad de la entrada, es decir trata de conseguir el patron global tomando todas las entradas. Sin embargo esto no es adecuado para el problema ya que si se mueve el patron la red pierde toda oportunidad de localizarlo con esa unidad aprendida, pero el patron sigue ahi. Normalmente si se entrenara una MLP para resolver este problema entrenaria varias unidades con el mismo paatron en diversas localizaciones, pero esto no es para nada eficiente. Ahora realmente lo que requiero es una unidad que pueda observar una ventana de pixeles cercanos ya que el patron es de 3 pixeles con 3 pesos bastaria, pero estos pesos se deberian mover por ventana como en la figura 3, ahora una sola unidad va generar un mapa de activaciones no solo un activacion como en la mlp, pero he logrado con solo una unidad resolver el problema invariante a traslaciones.
+Una ejemplo bastante sencillo presente en la figura anterior es el siguiente. Supongamos que quiero una red que se active si encuentra en patron 0,1,0 en algun lugar de la entrada. En la figura se observa una linea con valores donde podria ubicarse tal patron, una red fully conected va tratar de ajustar sus pesos a la localizacion exacta, es decir trata de conseguir el patron global tomando todas las entradas. Sin embargo esto no es adecuado para el problema ya que de mover el patron la red pierde toda oportunidad de localizarlo con esa unidad aprendida. Normalmente si se entrenara una MLP para resolver este problema este modelo entrenaria varias unidades con el mismo patron pero en diversas localizaciones. Es facil de observar que lo que requiero realmente es una unidad que pueda observar una ventana de pixeles cercanos mas concretamente el patron objetivo es de 3 pixeles por lo que con 3 pesos bastaria. Esta operacion sin nombre es la convolucion.
 
-Las convoluciones son una alternativa mucho mas razonable donde solo pesos con pixeles cercanos se usan. Esto tiene la gran ventaja que se aplica la misma funcion a elementos trasladados. 
+ En una convolucion se definen pesos que se comparten en todas las posiciones posibles de la ventana deslizable sobre la entrada. Cada posicion de la ventana genera una activacion mediante un producto punto entre sus pesos y la entrada, es decir lo mismo que una capa fully conected pero local a una ventana. Es importante recalcar la gran diferencia es que ahora una sola unidad nos entrega muchas activaciones (no solo 1 como en el caso fully conected) con un numero menor de pesos ya que no hay que considerar un peso para cada entrada.
 
-Como mencionaba las convoluciones por unidad generan un mapa de activaciones. Por eso la unidad de una convolucion es el filtro que posee un kernel este produce un mapa de activaciones donde cada activacion tiene asociada una localizacoin en la imagen o una ventana. Esta es una gran diferencia ya que al mantener la estructura 2D de las activaciones se guarda informacion espacial o el donde esa ubicada tal activacion. Para un ejemplo de convolucion 2D ir a figura interactiva
+Dado una unidad de convolucion (de ahora en adelante filtro) se va generando un mapa de activaciones. Este filtro tiene pesos para cada elemento en la ventana, estos pesos se llaman kernel. Las activaciones de un filtro se ordenan segun la estructura de la entrada, si la entrada es una matriz 2D se va generar un mapa 2D al aplicar un filtro de convolucion. Esta es una gran diferencia ya que al mantener la estructura se guarda informacion espacial o el donde esa ubicada tal activacion.
 
 A modo de resumen las convoluciones ahorran parametros ya que se requieren muchas unidades fully conected para encontrar caracteristicas en diversas localizaciones, permiten tener operaciones invariantes a traslacion al ser la misma operacion aplicada en diversas posiciones y mantienen informacion espacial al generar mapas de activaciones.
 
-Y tambien hay que recordar que el asunto es igual que en las redes MLP a medida que logramos colocar mas capas los conceptos se vuelven mas abstractos. Ya que si bien en las primeras capas de convolucion solo encontraremos bordes o patrones simples en las ultimas llegamos a encontrar objetos en casos de problemas de clasificacion como IMAGENET.
-
+Esta operacion es posible de apilar (crear capas sobre capas) las misma forma que las capas fully conected. Y al igual que en redes MLP a medida que logramos colocar mas capas las entradas que mayormente activan estas unidades se vuelven cada vez mas complejas. Existe literatura que indica que si entrenamos en un dataset como IMAGENET (dataset de clasificacion de objetos cotidianos) observaremos en las primeras capas bordes o patrones simples mientras que en las ultimas llegamos a encontrar detectores de objetos.
 
 # Parametros de convolucion
 
 La convolucion viene determinada por los siguientes parametros :
 
-* <u>Kernel: </u> Una capa fully conected en el fondo es solamente un producto punto entre una entrada y un vector de pesos. La convolucion es otra vez un producto punto, pero que se define en una ventana de pesos. Los pesos de esta ventana se llaman kernel, el cual en el caso 2D es una matriz de valores. 
+* <u>Kernel: </u> Una capa fully conected en el fondo es solamente un producto punto entre una entrada y un vector de pesos. La convolucion es otra vez un producto punto, pero se define en una ventana de pesos. Los pesos de esta ventana se llaman kernel, el cual en el caso 2D es una matriz de valores. 
 
-* <u>Stride: </u> Corresponde a el paso en cada dimension para cada ventana. Stride 1 significa que avanzamos un pixel.
+* <u>Stride: </u> Corresponde a el paso en cada dimension para cada ventana. Stride 1 significa que avanzamos un pixel entre una ventana y otra.
 
-* <u>Padding: </u> Indica que hacer en los bordes de la imagen. Normalmente se usa cero padding que es agregar ceros u otro valor en los bordes de la entrada. Dentro de estos padding estan los mas famosos VALID y SAME. 
+* <u>Padding: </u> Indica que hacer en los bordes de la imagen. Normalmente se usa cero padding que es agregar ceros en los bordes de la entrada.
 
 Para entender mejor como varia la convolucion 2D respecto a estos parametros tengo la siguiente animacion:
 
 <iframe src="/conv.html" width="600" height="400" marginwidth="0" marginheight="0" scrolling="yes"></iframe>
 
 
-La convolucion no solo es 2D y se puede definir la convolucion centrada en cierta cordenada como : 
+
+En adelante la convolucion se muestra solo es 2D, pero esto solo es por una mas facil visualizacion se puede definir la convolucion en una dimension N centrada en cierta cordenada como : 
 
 $$Conv(n_1,n_2, ... n_M) = \sum_{k_1 = dim_1} \sum_{k_2 = dim_2}...\sum_{k_M = dim_M} Kernel(k_1,k_2,...,k_M) \cdot Input(n_1-k_1,n_2-k_2,...,n_M-k_M)$$
 
-Que viene siendo aplicar el mismo concepto de mover una ventana y multiplicar solo que ahora en un cubo, hiper cubo, etc.
+Que viene siendo aplicar el mismo concepto de mover una ventana y multiplicar solo que en espacios de mayor dimension.
+
 
 
 
 # Convolucion como matrix
 
-Es util entender una capa fully conected como una multiplicacion por una matriz. Y a su vez se puede expresar el resultado de una convolucion como una serie de unidades fully conected que solo tienen conexiones de forma local (aunque normalmente las convoluciones no se implementen de esta forma) de esta forma se observa la cantidad de parametros que son posibles de ahorrar. 
+
+Es util ver la aplicacion de una capa fully conected como una multiplicacion entre vectores, donde la entrada se multiplica por el vector correspondiente a los pesos para cada entrada.
+
+$$ X \cdot F = A \quad  \| \quad (1,f) \cdot (f,1) = (1,1)$$
+
+A su vez se puede expresar el resultado de una convolucion como una serie de unidades fully conected que solo tienen conexiones de forma local (aunque normalmente las convoluciones no se implementen de esta forma) se observa de esta forma la gran cantidad de parametros que son posibles de ahorrar. 
 
 
-![Figura 1: Como la convolucion y las capas fully conected se pueden comparar .](https://image.ibb.co/dmrEwx/fig2.png =50x)
+![Figura 2: Como la convolucion y las capas fully conected se pueden comparar .](https://image.ibb.co/dmrEwx/fig2.png =50x)
 
 
+En la figura se muestra una convolucion, su mapa de activacion resultante y 4 unidades fully conected que realizan el mismo trabajo.
 
 Esta asociacion tambien tiene importancia para la convolucion transpuesta como mencionare mas abajo.
 
@@ -68,38 +67,43 @@ Esta asociacion tambien tiene importancia para la convolucion transpuesta como m
 
 # Conectividad de filtros
 
-Si se habla de la forma en que cada de entrada es influenciada por cada posicion de filtro tendremos este diagrama. De ahora no parece mucha utilidad pero la tendra. 
+Cuando se realiza el mapa de activaciones se usan diversas ventanas, si se numerca cada ventana desde izquierda a derecha arriba a abajo y se numera en la entrada que ventanas pasan por cada elemento tenemos una imagen como la siguiente.
 
 ![Figura 3: Diagrama de conexiones de los filtros .](https://image.ibb.co/bJKX1x/fig3.png =50x)
 
+Esta figura muestra que areas de la entrada son utilizadas para construir las diversas activaciones. Por ahora no parece mucha utilidad pero la tendra. 
 
-(Diagrama en latex???)
+
 
 
 # Transposed convolucion
 
-Esta capa muchas veces se conoce como fractionally strided convolution, transposed convolution o  mal nombrada deconvolucion. Para explicar esta operacion supongamos que tenemos una entrada, un kernel y una salida resultante de la convolucion de ciertos parametros de la entrada con el kernel, la tranposed convolution son los parametros de convolucion que producirian dado la salida denuevo el patron de conectividad de la entrada con el mismo kernel. Lo importante es que la transposed convolution no es la operacion inversa de la convolucion ya que no produce los mismos VALORES sino que reproduce la CONECTIVIDAD por esto no debe llamarse deconvolucion. 
+Esta capa muchas veces se conoce como fractionally strided convolution, transposed convolution o la mal nombrada deconvolucion. Pero una forma facil de definirla es que operacion realizo para tener un mapa de activacion del tamaño de la entrada partiendo desde la salida. 
 
-La gran importancia de las tranpsosed convolution es que permite aumentar las dimensiones de mapas de activacion. Ejemplos de estos son redes que generan imagenes a partir de una representacion de menor dimensionalidad estos modelos han tenido gran impacto en los ultimos anos como son las encoders convolucionales, GANS, VAE convolucional, etc.
+Siendo mas especifico supongamos que tenemos una entrada, un kernel y un mapa de activaciones resultante. La tranposed convolution son los parametros de convolucion que producirian dado la salida un mapa de activacion del tamaño de la entrada y a su vez mantener el patron de conectividad con el mismo kernel. Es importante destacar que la transposed convolution no es la operacion inversa de la convolucion ya que no produce los mismos VALORES sino que reproduce la CONECTIVIDAD por esto no debe llamarse deconvolucion. 
 
+Por ahora parece algo bastante difuso, pero espero que esto se logre aclarar con variados ejemplos y recordando que la transposed convolution sigue siendo una convolucion.
 
-Veamos un ejemplo y como obtener la transposed convolution dada varias persepctivas.
+La utilidad de las tranpsosed convolution es que permite aumentar las dimensiones de mapas de activacion. Ejemplos de estos son redes que generan imagenes a partir de una representacion de menor dimensionalidad. Estos modelos han tenido gran impacto en los ultimos años como son las encoders convolucionales, GANS, VAE convolucional, etc.
 
-ACA EJEMPLO DE CONVOLUCION 3X3 kernel sobre 3x3 Input con pad 1x1.
+Veamos un ejemplo con el cual revisaremos la transposed convolution dada varias persepctivas.
 
-Lo que quiero obtener es una operacion que dada el mapa 2x2 como entrada y el mismo kernel 3x3 pueda obtener otro mapa de entrada 3x3 con la misma conectividad de la convolucion original. Con conectividad me refiero a que si la salida original fue armada por 9 unidades (3x3 este caso) deberia influenciar 9 bloques en las mismas posiciones esta nueva operacion. 
+![Figura 3: Diagrama de conexiones de los filtros .](https://image.ibb.co/bJKX1x/fig3.png =50x)
+
+Lo que quiero obtener es una operacion que dada el mapa 2x2 como entrada y el mismo kernel 3x3 pueda obtener otro mapa de entrada 3x3 con la misma conectividad de la convolucion original. Con conectividad me refiero a que si la salida original fue armada por 9 unidades (3x3 este caso) esta nueva operacion deberia influenciar 9 bloques en las mismas posiciones.
 
 # Deducir a partir de parametros de convoluciones
 
-En [1] se plantea detalladamente como mediante el calculo de convoluciones es posible realizar la operacion de la convolucion traspuesta. De estas se extraen las siguientes formulas.  Para ello es necesario mantener el kernel variando stride y padding.
+En [1] se plantea detalladamente como mediante el calculo de convoluciones es posible realizar la operacion de la convolucion traspuesta. De estas se extraen las siguientes formulas.  Para ello es necesario mantener el kernel variando stride y padding. 
+
+No voy a entrar en detalle sobre el calculo de estas operaciones (para eso ir a [1]), pero en este caso observemos que hay overlap en la conectividad de los filtros, esto indica que necesitamos avanzar "lento" en el filtro de salida para reconstruir el mapa de entrada. Esdecir hay que agregar padding de forma que al mover el filtro se mantengan los overlap de los valores observados en el diagrama de conectividad. En este caso implica un stride fraccional de 1 elemento o agregar 1 cero entremedio de cada valor del filtro de salida.
+
+![Figura 4: Creando convolucion equivalente.](https://image.ibb.co/dancKH/fig4.png =50x)
 
 
-Lista de operaciones
 
+Se observa que esta convolucion sobre esta imagen con ceros entremedio efectivamente mantiene la conectividad.
 
-Por ejemplo en este caso tenemos que una convolucion ASDFJASLDJ genera salidas de forma ASDFASDJLK. Por lo que en este caso la operacion convolucion equivalente se ve asi:
-
-Lo cual efectivamente resuelve el caso pedido. Aca quiero mencionar que no entre en mucho detalle de lo que ocurre donde hay stride fraccional (casos donde hay stride entero) para revisar esos casos ir a [1] y que son un caso especial.
 
 
 # Deduciendo a partir de convolucion como multiplicaciones de matrices
@@ -123,18 +127,18 @@ Luego las posiciones de convoluciones un filtro involucradas son
 
 $$\left [ \left[\begin{matrix}k_{00} & k_{01} & k_{02} & 0 & 0\\k_{10} & k_{11} & k_{12} & 0 & 0\\k_{20} & k_{21} & k_{22} & 0 & 0\\0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0\end{matrix}\right], \quad \left[\begin{matrix}0 & 0 & k_{00} & k_{01} & k_{02}\\0 & 0 & k_{10} & k_{11} & k_{12}\\0 & 0 & k_{20} & k_{21} & k_{22}\\0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0\end{matrix}\right], \quad \left[\begin{matrix}0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0\\k_{00} & k_{01} & k_{02} & 0 & 0\\k_{10} & k_{11} & k_{12} & 0 & 0\\k_{20} & k_{21} & k_{22} & 0 & 0\end{matrix}\right], \quad \left[\begin{matrix}0 & 0 & 0 & 0 & 0\\0 & 0 & 0 & 0 & 0\\0 & 0 & k_{00} & k_{01} & k_{02}\\0 & 0 & k_{10} & k_{11} & k_{12}\\0 & 0 & k_{20} & k_{21} & k_{22}\end{matrix}\right]\right ]$$
 
-Ahora tomamos cada una de estas matrices y la estiramos en un vector. No es dificil darse cuenta que a convolucion es la multiplicacion de matrices entre el vector estirado de entrada con la matriz formada por estirar y apilar las matrices anteriores.
+Tomamos cada una de estas matrices y la estiramos en un vector. No es dificil darse cuenta que a convolucion es la multiplicacion de matrices entre el vector estirado de entrada con la matriz formada por estirar y apilar las matrices anteriores.
 
 
 $$
 U = \left[\begin{matrix}k_{00} & 0 & 0 & 0\\k_{01} & 0 & 0 & 0\\k_{02} & k_{00} & 0 & 0\\0 & k_{01} & 0 & 0\\0 & k_{02} & 0 & 0\\k_{10} & 0 & 0 & 0\\k_{11} & 0 & 0 & 0\\k_{12} & k_{10} & 0 & 0\\0 & k_{11} & 0 & 0\\0 & k_{12} & 0 & 0\\k_{20} & 0 & k_{00} & 0\\k_{21} & 0 & k_{01} & 0\\k_{22} & k_{20} & k_{02} & k_{00}\\0 & k_{21} & 0 & k_{01}\\0 & k_{22} & 0 & k_{02}\\0 & 0 & k_{10} & 0\\0 & 0 & k_{11} & 0\\0 & 0 & k_{12} & k_{10}\\0 & 0 & 0 & k_{11}\\0 & 0 & 0 & k_{12}\\0 & 0 & k_{20} & 0\\0 & 0 & k_{21} & 0\\0 & 0 & k_{22} & k_{20}\\0 & 0 & 0 & k_{21}\\0 & 0 & 0 & k_{22}\end{matrix}\right]
 $$
 
-Podemos expresar entonces como
+Podemos expresar la convolucion como:
 
 $$ X \cdot U = O \quad  \| \quad (1,f) \cdot (f,u) = (1,u)$$
 
-Ahora podemos definir otra operacion (notar que tambien es una convolucion) de la siguiente forma.
+Ahora podemos definir otra operacion de la siguiente forma.
 
 $$ O \cdot T = C \quad  \| \quad (1,u) \cdot (u,f) = (1,f)$$
 
@@ -152,14 +156,17 @@ $$
 C = \left[\begin{matrix}O_{00} k_{00} & O_{00} k_{01} & O_{00} k_{02} + O_{01} k_{00} & O_{01} k_{01} & O_{01} k_{02}\\O_{00} k_{10} & O_{00} k_{11} & O_{00} k_{12} + O_{01} k_{10} & O_{01} k_{11} & O_{01} k_{12}\\O_{00} k_{20} + O_{10} k_{00} & O_{00} k_{21} + O_{10} k_{01} & O_{00} k_{22} + O_{01} k_{20} + O_{10} k_{02} + O_{11} k_{00} & O_{01} k_{21} + O_{11} k_{01} & O_{01} k_{22} + O_{11} k_{02}\\O_{10} k_{10} & O_{10} k_{11} & O_{10} k_{12} + O_{11} k_{10} & O_{11} k_{11} & O_{11} k_{12}\\O_{10} k_{20} & O_{10} k_{21} & O_{10} k_{22} + O_{11} k_{20} & O_{11} k_{21} & O_{11} k_{22}\end{matrix}\right]
 $$
 
-Si quieres mas detalles de esto o un paso a paso aca esta el jupyter notebook que uso para generarlos ([Link](https://drive.google.com/file/d/1wQXRsPqAiFC_DoiJ8paraslB7DlqxD6j/view?usp=sharing). Usar de forma local no funciona bien en colaboratory).
+Si quieres mas detalles de esto aca esta el jupyter notebook que uso para generarlos ([Link](https://drive.google.com/file/d/1wQXRsPqAiFC_DoiJ8paraslB7DlqxD6j/view?usp=sharing)).
 
 # Deduccion a partir de visualizacion por superposicion (lo mismo que conectividad)
 
-Una forma mucho mas facil de observar que es lo que ocurre es observando el patron de conceccion detalladamente y observar que al realizar la convolucion estamos tomando todos los valores de la ventana y colapsando el patron y al hacer la convolucion transpuesta tomamos el valor central y lo expandimos a la conectivida dado los pesos. Por mi parte me gusta ver esta operacion como si tuvieses un estampador que alimentas con un valor arriba y saca 9 valores abajo el cual vas aplicando por las mismas posiciones que se aplicaron los filtros, de forma que se produce el patron de conectividad.
+Otra forma de entender la convolucion transpuesta es observando el patron de conectividad detalladamente y observar que al realizar la convolucion estamos tomando todos los valores de la ventana colapsando el patron. Entonces la convolucion transpuesta deberia realizar la operacion inveras de dado un valor central expandir a la conectividad dada. Por mi parte me gusta ver esta operacion como si tuvieses un estampador que alimentas con un valor arriba y saca 9 valores abajo el cual vas aplicando por las mismas posiciones que se aplicaron los filtros, de forma que se produce el patron de conectividad.
 
-ACA EJEMPLO CON CONECTIVIDAD.
-(Colores de filtro y traslape)
+
+
+![Figura 5: Observar como superposicion de filtros .](https://image.ibb.co/m59JRx/fig5.png =50x)
+
+
 
 
 # En resumen

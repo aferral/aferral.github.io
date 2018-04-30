@@ -163,7 +163,7 @@ Si quieres mas detalles de esto aca esta el jupyter notebook que uso para genera
 Otra forma de entender la convolucion transpuesta es observando el patron de conectividad detalladamente y observar que al realizar la convolucion estamos tomando todos los valores de la ventana colapsando el patron. Entonces la convolucion transpuesta deberia realizar la operacion inveras de dado un valor central expandir a la conectividad dada. Por mi parte me gusta ver esta operacion como si tuvieses un estampador que alimentas con un valor arriba y saca 9 valores abajo el cual vas aplicando por las mismas posiciones que se aplicaron los filtros, de forma que se produce el patron de conectividad.
 
 
-![Figura 5: Observar como superposicion de filtros .](https://image.ibb.co/m59JRx/fig5.png =50x)
+![Figura 5: Observar como superposicion de filtros .](https://image.ibb.co/nOxPJc/fig5.png =50x)
 
 
 

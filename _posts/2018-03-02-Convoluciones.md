@@ -56,7 +56,7 @@ $$ X \cdot F = A \quad  \| \quad (1,f) \cdot (f,1) = (1,1)$$
 A su vez se puede expresar el resultado de una convolucion como una serie de unidades fully conected que solo tienen conexiones de forma local (aunque normalmente las convoluciones no se implementen de esta forma) se observa de esta forma la gran cantidad de parametros que son posibles de ahorrar. 
 
 
-![Figura 2: Como la convolucion y las capas fully conected se pueden comparar .](https://image.ibb.co/dmrEwx/fig2.png =50x)
+![Figura 2: Como la convolucion y las capas fully conected se pueden comparar .](https://image.ibb.co/dmrEwx/fig2.png)
 
 
 En la figura se muestra una convolucion, su mapa de activacion resultante y 4 unidades fully conected que realizan el mismo trabajo.
@@ -69,7 +69,7 @@ Esta asociacion tambien tiene importancia para la convolucion transpuesta como m
 
 Cuando se realiza el mapa de activaciones se usan diversas ventanas, si se numerca cada ventana desde izquierda a derecha arriba a abajo y se numera en la entrada que ventanas pasan por cada elemento tenemos una imagen como la siguiente.
 
-![Figura 3: Diagrama de conexiones de los filtros .](https://image.ibb.co/bJKX1x/fig3.png =50x)
+![Figura 3: Diagrama de conexiones de los filtros .](https://image.ibb.co/bJKX1x/fig3.png)
 
 Esta figura muestra que areas de la entrada son utilizadas para construir las diversas activaciones. Por ahora no parece mucha utilidad pero la tendra. 
 
@@ -88,7 +88,7 @@ La utilidad de las tranpsosed convolution es que permite aumentar las dimensione
 
 Veamos un ejemplo con el cual revisaremos la transposed convolution dada varias persepctivas.
 
-![Figura 3: Diagrama de conexiones de los filtros .](https://image.ibb.co/bJKX1x/fig3.png =50x)
+![Figura 3: Diagrama de conexiones de los filtros .](https://image.ibb.co/bJKX1x/fig3.png)
 
 Lo que quiero obtener es una operacion que dada el mapa 2x2 como entrada y el mismo kernel 3x3 pueda obtener otro mapa de entrada 3x3 con la misma conectividad de la convolucion original. Con conectividad me refiero a que si la salida original fue armada por 9 unidades (3x3 este caso) esta nueva operacion deberia influenciar 9 bloques en las mismas posiciones.
 
@@ -98,7 +98,7 @@ En [1] se plantea detalladamente como mediante el calculo de convoluciones es po
 
 No voy a entrar en detalle sobre el calculo de estas operaciones (para eso ir a [1]), pero en este caso observemos que hay overlap en la conectividad de los filtros, esto indica que necesitamos avanzar "lento" en el filtro de salida para reconstruir el mapa de entrada. Esdecir hay que agregar padding de forma que al mover el filtro se mantengan los overlap de los valores observados en el diagrama de conectividad. En este caso implica un stride fraccional de 1 elemento o agregar 1 cero entremedio de cada valor del filtro de salida.
 
-![Figura 4: Creando convolucion equivalente.](https://image.ibb.co/dancKH/fig4.png =50x)
+![Figura 4: Creando convolucion equivalente.](https://image.ibb.co/dancKH/fig4.png)
 
 
 

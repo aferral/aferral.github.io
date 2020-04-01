@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 ## Levantar servicio mediante redireccionar trafico con AWS
 
@@ -51,7 +51,3 @@ ssh -i key_here  -N -R 9000:localhost:8000  ec2-user@ec2_url_here
 Este comando toma localhost:8000 y lo conecta con ec2_url_here:9000 de forma que toda coneccion que entre por este llega al localhost y viceversa. El '-N' es para evitar abrir una consola.
 
 Para probar ir a http://(ec2_url_here):9000 suponiendo que sea una aplicacion web.
-
-
-
-

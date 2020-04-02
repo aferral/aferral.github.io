@@ -27,7 +27,7 @@ Despues de crear el grupo de seguridad asignarlo a la instancia. Recomiendo crea
 
 Para habilitar la redireccion por ssh es necesario cambiar la configuracion del servicio ssh.
 
-	ssh -i key_here ec2-user@ec2_url_here -t sudo vim "/etc/ssh/sshd_config" && sudo reboot
+	ssh -i key_here ec2-user@ec2_url_here -t 'sudo vim "/etc/ssh/sshd_config" && sudo reboot'
 
 
 Este comando entra a la instancia edita sshd_config, en el cual es necesario cambiar
@@ -46,8 +46,8 @@ Al salir se reiniciara la maquina automaticamente.
 Si tenemos una aplicacion web ejecutandose en localhost:8080 y quiero tener esta aplicacion en el puerto 9000 en la instancia de aws se ejecuta el siguiente comando.
 
 ```
-ssh -i key_here  -N -R 9000:localhost:8000  ec2-user@ec2_url_here
+ssh -i key_here  -N -R 9000:localhost:8000 -o ServerAliveInterval=10 -o ExitOnForwardFailure=yes  ec2-user@ec2_url_here 
 ```
-Este comando toma localhost:8000 y lo conecta con ec2_url_here:9000 de forma que toda coneccion que entre por este llega al localhost y viceversa. El '-N' es para evitar abrir una consola.
+Este comando toma localhost:8000 y lo conecta con ec2_url_here:9000 de forma que toda coneccion que entre por este llega al localhost y viceversa. El '-N' es para evitar abrir una consola. El ServerAliveInterval permite que la coneccion no se corte en periodos de inactividad. El ExitOnForwardFailure se encarga de cerrar la conexion en caso de error de forma correcta.
 
 Para probar ir a http://(ec2_url_here):9000 suponiendo que sea una aplicacion web.

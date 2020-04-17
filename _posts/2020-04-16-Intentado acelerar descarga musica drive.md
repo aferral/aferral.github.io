@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 ## Intentando descargar archivos de musica de drive 
 
@@ -78,4 +78,3 @@ Si bien no logré que llegara a ser fluido ahora es un tiempo aguantable.
 4. [Sobre streaming files en flask](https://flask.palletsprojects.com/en/1.1.x/patterns/streaming/)
 5. [Sobre request parciales](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/206)
 6. [Ejemplo de streaming de video en flask](https://blog.miguelgrinberg.com/post/video-streaming-with-flask)
-

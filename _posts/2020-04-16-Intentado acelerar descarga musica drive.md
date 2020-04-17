@@ -1,7 +1,6 @@
 ---
 published: true
 ---
-## Intentando descargar archivos de musica de drive 
 
 Este último tiempo he estado revisando algunos proyectos pequeños que quería terminar. 
 Uno es un programa que permite mantener musica en google drive y genera un sistema de archivos virtual (FUSE), la idea es guardar tu propia mi música en múltiples dispositivos y evitar usar youtube o spotify para escuchar música.
